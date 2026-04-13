@@ -1,27 +1,39 @@
 class Solution {
 public:
-    void solve(vector<int>&candidates, int target, vector<int>&curr, int idx,vector<vector<int>>& result){
-        if(target < 0) return;
-        if(target == 0){
-            result.push_back(curr);
+    void combSum(int i, int n, vector<int>& candidates, vector<int>& arr,
+                 vector<vector<int>>& ans, int target, int sum) {
+
+        if(sum == target){
+            ans.push_back(arr);
             return;
         }
 
-        for(int i=idx; i<candidates.size(); i++){
-            if(i > idx && candidates[i] == candidates[i-1]){
-                continue;
-            }
-            curr.push_back(candidates[i]);
-            solve(candidates, target-candidates[i],curr,  i+1, result);
-            curr.pop_back();
+        if(i >= n || sum > target){
+            return;
+        }
+
+        for(int ind = i; ind < candidates.size(); ind++){  
+
+            // skip duplicates
+            if(ind > i && candidates[ind] == candidates[ind-1]) continue;
+
+            if(sum + candidates[ind] > target) break;  
+
+            arr.push_back(candidates[ind]);
+
+            combSum(ind + 1, n, candidates, arr, ans, target,
+                    sum + candidates[ind]); 
+            arr.pop_back();
         }
     }
 
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        vector<vector<int>> result;
-        vector<int> curr;
+        vector<vector<int>> ans;
+        vector<int> arr;
+
         sort(candidates.begin(), candidates.end());
-        solve(candidates, target, curr, 0, result);
-        return result;
+
+        combSum(0, candidates.size(), candidates, arr, ans, target, 0);
+        return ans;
     }
 };
