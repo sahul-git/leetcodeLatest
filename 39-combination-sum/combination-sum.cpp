@@ -1,25 +1,24 @@
 class Solution {
 public:
-    vector<vector<int>> ans;
-    void generate(vector<int>& arr, vector<int>& candidates,int sum,  int target,int i, int n){
-        if(sum == target ){
+    void combSum(int i, int n, vector<int>& candidates, vector<int>&arr,vector<vector<int>>& ans, int target, int sum){
+        if(sum == target){
             ans.push_back(arr);
-            return ;
-        }else if( i == n || sum > target){
             return;
         }
+        if(i >= n || sum> target){
+            return ;
+        }
         arr.push_back(candidates[i]);
-        generate(arr, candidates, sum + candidates[i], target, i, n);
+        combSum(i, n, candidates, arr, ans, target, sum+candidates[i]);
         arr.pop_back();
-        generate(arr, candidates, sum , target, i+1, n);
-
-        
+        combSum(i+1, n, candidates, arr, ans, target, sum);
+         
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        int n = candidates.size();
+        vector<vector<int>> ans;
         vector<int> arr;
-        int sum = 0;
-        generate(arr, candidates, sum, target, 0, n);
+        combSum(0,  candidates.size(),candidates,  arr, ans, target, 0);
         return ans;
+
     }
 };
