@@ -1,22 +1,21 @@
 class Solution {
 public:
-    void generate(vector<vector<int>>& ans, vector<int>& arr, vector<int>& nums, int i, int n){
-        if(i == n){
+    void formSubsets(int i, int n, vector<int>& nums, vector<int>&arr, vector<vector<int>>& ans){
+        if(i >= n){
             ans.push_back(arr);
             return;
         }
-        generate(ans, arr, nums, i+1, n);
         arr.push_back(nums[i]);
-        generate(ans, arr,nums,  i+1, n );
+        formSubsets(i+1, n, nums, arr, ans);
         arr.pop_back();
+        formSubsets(i+1, n, nums, arr, ans);
+
     }
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
         int n = nums.size();
-        vector<int> temp;
-        generate(ans, temp, nums, 0, n);
+        vector<vector<int>> ans;
+        vector<int> arr;
+        formSubsets(0, n, nums, arr, ans);
         return ans;
-
-
     }
 };
