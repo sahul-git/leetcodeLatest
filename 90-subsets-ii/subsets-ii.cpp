@@ -1,23 +1,24 @@
 class Solution {
 public:
-    void solve(vector<int>& nums, vector<int>& curr,int ind, vector<vector<int>>& result ){
-        
-        result.push_back(curr);
-        for(int i=ind; i<nums.size(); i++){
-            if(i > ind && nums[i] == nums[i-1]){
+    void formSubsets(int i, int n, vector<int>& nums, vector<int>&arr, vector<vector<int>>& ans){ 
+        ans.push_back(arr);
+            
+        for(int ind = i; ind<n; ind++){
+            if(ind>i && nums[ind] == nums[ind-1]){
                 continue;
             }
-            curr.push_back(nums[i]);
-            solve(nums, curr, i+1, result);
-            curr.pop_back();
-           
+            arr.push_back(nums[ind]);
+            formSubsets(ind+1, n, nums, arr, ans);
+            arr.pop_back();
         }
+
     }
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        vector<vector<int>> result;
-        vector<int> curr;
+        int n = nums.size();
+        vector<vector<int>> ans;
+        vector<int> arr;
         sort(nums.begin(), nums.end());
-        solve(nums, curr, 0, result);
-        return result;
+        formSubsets(0, n, nums, arr, ans);
+        return ans;
     }
 };
