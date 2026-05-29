@@ -1,45 +1,35 @@
 class Solution {
 public:
-    //  int maxGain(int ind, int buy, vector<int>& prices, vector<vector<int>>& dp){
-    //     if(ind == prices.size()) return 0;
-    //     if(dp[ind][buy]!= -1) return dp[ind][buy];
-        
-    //     int profit=INT_MIN;
-    //     if(buy){
-    //         profit = max(-prices[ind] + maxGain(ind+1, 0, prices, dp), maxGain(ind+1, 1, prices, dp));
-    //     }else{
-    //         profit = max(prices[ind] + maxGain(ind+1, 1, prices,dp), maxGain(ind+1, 0, prices,dp));
+    // int maxGain(int i,int buy, vector<int>prices, vector<vector<int>>& dp){
+    //     if(i==prices.size()){
+    //         return 0;
     //     }
-    //     return dp[ind][buy] = profit;
+    //     if(dp[i][buy]!=-1) return dp[i][buy];
+
+    //     int profit = 0;
+    //     if(buy){
+    //         profit = max(-prices[i]+maxGain(i+1, 0, prices, dp), 0+maxGain(i+1, 1, prices, dp));
+    //     }else{
+    //         profit = max(prices[i]+maxGain(i+1, 1, prices, dp), 0+ maxGain(i+1, 0, prices, dp));
+    //     }
+    //     return dp[i][buy] = profit;
     // }
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        // vector<vector<int>> dp(n+1, vector<int>(2, -1));
-        // dp[n][0] = 0;
-        // dp[n][1] = 0;
-        // for(int i=n-1; i>=0; i--){
-            
-        //     for(int buy=0; buy<=1; buy++){
-        //         int profit = 0;
-        //         if(buy) profit = max(-prices[i]+dp[i+1][0], dp[i+1][1]);
-        //         else profit = max(prices[i]+dp[i+1][1], dp[i+1][0]);
-        //         dp[i][buy] = profit;
-        //     }
-        // }
-        // return dp[0][1];
-
-        vector<int> ahead(2, 0), curr(2,0);
-
+        vector<vector<int>> dp(n+1, vector<int>(2,-1));
+        dp[n][0] = dp[n][1] = 0;
         for(int i=n-1; i>=0; i--){
             for(int buy=0; buy<=1; buy++){
                 int profit = 0;
-                if(buy) profit = max(-prices[i]+ahead[0], ahead[1]);
-                else profit = max(prices[i]+ahead[1], ahead[0]);
-                curr[buy] = profit;
+                if(buy){
+                    profit = max(-prices[i]+dp[i+1][0], 0+dp[i+1][1]);
+                }else{
+                    profit = max(prices[i]+dp[i+1][1], 0+ dp[i+1][0]);
+                }
+                dp[i][buy] = profit;
             }
-            ahead = curr;
+            
         }
-        return ahead[1];
-
+        return dp[0][1];
     }
 };
