@@ -1,40 +1,43 @@
 class Solution {
 public:
     int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
-        vector<vector<int>> mat(n, vector<int>(n, 1e4 + 1));
-        for(int i = 0; i<n ;i++){
-            mat[i][i] = 0;
+        vector<vector<int>> dist(n, vector<int>(n, 1e9));
+
+        for(int i=0; i<edges.size(); i++){
+            dist[edges[i][0]][edges[i][1]] = edges[i][2];
+            dist[edges[i][1]][edges[i][0]] = edges[i][2];
         }
-        for(int i=0; i< edges.size(); i++){
-            mat[edges[i][0]][edges[i][1]] =  edges[i][2];
-            mat[edges[i][1]][edges[i][0]] =  edges[i][2];
+        for(int i=0; i<n; i++){
+            dist[i][i] = 0;
         }
-        for(int k=0; k< n; k++){
+
+        for(int k=0; k<n; k++){
             for(int i=0; i<n; i++){
                 for(int j=0; j<n; j++){
-                    mat[i][j] = min(mat[i][j], mat[i][k] + mat[k][j]);
+                    if(dist[i][k]!= 1e9 && dist[k][j]!= 1e9){
+                        dist[i][j] = min(dist[i][k] + dist[k][j], dist[i][j]);
+                    }
                 }
+            }
+        }
 
-            }
-        }
-        
-        int city = -1;
-        int maxCount = INT_MAX;
+        int ans = 0;
+        int mini = n;
         for(int i=0; i<n; i++){
-            int count = 0;
-            for(int j=0;j < n ; j++){
-                if(mat[i][j] <= distanceThreshold){
-                    count++;
+            int neighbors = 0;
+            for(int j=0; j<n; j++){
+                if(dist[i][j] <= distanceThreshold){
+                    neighbors++;
                 }
             }
-            if(maxCount > count){
-                maxCount = count;
-                city = i;
-            }else if( maxCount == count){
-                city = max(city, i);
+            if(neighbors <= mini){
+                mini = neighbors;
+                ans = i;
             }
         }
-        return city;
+
+
+        return ans;
 
     }
 };
