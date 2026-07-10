@@ -65,24 +65,22 @@ class Solution {
 public:
     int makeConnected(int n, vector<vector<int>>& connections) {
 
-        if (connections.size() < n - 1)
-            return -1;
+        if(connections.size() < n-1) return -1;
 
-        DisjointSet dsu(n);
+        DisjointSet ds(n);
 
-        int components = n;
+        int connection = n;
 
-        for (auto &it : connections) {
-
-            int u = it[0];
-            int v = it[1];
-
-            if (dsu.findParent(u) != dsu.findParent(v)) {
-                dsu.unionBySize(u, v);
-                components--;
+        for(int i=0; i<connections.size(); i++){
+            int u = connections[i][0];
+            int v = connections[i][1];
+            if(ds.findParent(u) != ds.findParent(v)){
+                ds.unionBySize(u, v);
+                connection--;
             }
         }
 
-        return components - 1;
+        return connection-1;
+
     }
 };
