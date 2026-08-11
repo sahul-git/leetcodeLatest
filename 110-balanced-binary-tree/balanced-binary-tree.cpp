@@ -11,20 +11,17 @@
  */
 class Solution {
 public:
-    int depth(TreeNode *node){
-        if(node == NULL) return 0;
-        int left = depth(node->left);
-        if(left == INT_MAX ) return INT_MAX;
-        int right = depth(node-> right);
-        if( right == INT_MAX) return INT_MAX;
-        if(abs(left - right) > 1) return INT_MAX;
-        return max(left, right) + 1;
-
+    int heightBalanced(TreeNode* root){
+        if(root == NULL) return 0;
+        int left = heightBalanced(root->left);
+        if(left == -1) return -1;
+        int right = heightBalanced(root->right);
+        if(right == -1) return -1;
+        if(abs(left - right) > 1) return -1;
+        return 1 + max(left, right);
     }
-
     bool isBalanced(TreeNode* root) {
-        int d = depth(root);
-        if(d == INT_MAX) return false;
-        return true;
+        if(root == NULL) return true;
+        return (heightBalanced(root) != -1);
     }
 };
