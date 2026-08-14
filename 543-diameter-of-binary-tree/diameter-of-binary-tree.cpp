@@ -11,17 +11,17 @@
  */
 class Solution {
 public:
-    int maxdia = 0;
-    int diameter(TreeNode* root){
+    int maxiDia = 0;
+    int diameterMax(TreeNode *root){
         if(root == NULL) return 0;
+        int left =  diameterMax(root->left);
+        int right =  diameterMax(root->right);
+        maxiDia = max(maxiDia, left + right);
+        return 1 + max(left, right);
 
-        int left = diameter(root->left);
-        int right = diameter(root->right);
-        maxdia = max(left + right, maxdia);
-        return 1 + max(left, right) ;
     }
     int diameterOfBinaryTree(TreeNode* root) {
-        int height =  diameter(root);
-        return maxdia;
+        int height = diameterMax(root);
+        return maxiDia;
     }
 };
