@@ -1,0 +1,72 @@
+class Solution {
+public:
+    vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {
+        int n = nums.size();
+    //     if(n == 1) return nums;
+
+    //    for(int i=0; i<n; i++){
+    //         while(true){
+    //             int smallValue = nums[i];
+    //             int idx = -1;
+
+    //             for(int j=i+1; j<n; j++){
+    //                 if(abs(nums[i] - nums[j]) <= limit){
+    //                     if(nums[j] < smallValue){
+    //                         smallValue = nums[j];
+    //                         idx = j;
+    //                     }
+    //                 }
+    //             }
+
+    //             if(idx != -1){
+    //                 swap(nums[i], nums[idx]);
+    //             }else{
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return nums;
+
+
+    vector<int> vec = nums;
+    sort(vec.begin(), vec.end());
+
+    int groupNum = 0;
+
+    unordered_map<int, int> numToGroup;
+    numToGroup[vec[0]] = groupNum;
+
+    unordered_map<int, list<int>> groupToList;
+    groupToList[groupNum].push_back(vec[0]);
+
+    for(int i=1; i<n; i++){
+        if(abs(vec[i]-vec[i-1]) > limit){
+            groupNum += 1;
+        }
+
+        numToGroup[vec[i]] = groupNum;
+        groupToList[groupNum].push_back(vec[i]);
+    }
+
+    //Build the answer ie, merge the groups
+    vector<int> result(n);
+
+    for(int i=0; i<n; i++){
+        int num = nums[i];
+        int group = numToGroup[num];
+        result[i] = *(groupToList[group].begin()); // delete after used element
+        groupToList[group].pop_front();
+
+        
+
+    }
+
+    return result;
+
+
+
+
+
+
+    }
+};
